@@ -10,9 +10,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan(basePackages = { "br.com.fiveware.controller" })
+@ComponentScan(basePackages = { "br.com.fiveware" })
 public class AppConfig extends WebMvcConfigurerAdapter {
-	
+
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
@@ -25,5 +25,5 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		resolver.setSuffix(".jsp");
 		return resolver;
 	}
-	
+
 }

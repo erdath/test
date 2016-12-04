@@ -1,39 +1,38 @@
 package br.com.fiveware.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
 
 import br.com.fiveware.model.Usuario;
 
-public class UsuarioDAO {
+@Repository
+public class UsuarioDAO implements DAO<Usuario> {
+
+	@PersistenceContext
 	private EntityManager entityManager;
-	
-	public UsuarioDAO() {
-		// TODO Auto-generated constructor stub
+
+	@Override
+	public Usuario buscar(int id) {
+		// TODO Auto-generated method stub
+		return (Usuario) entityManager.createQuery("select u from Usuario u where u.id = :id").setParameter("id", id)
+				.getSingleResult();
 	}
-	
-	public void inserir(Usuario usuario){
-		try{
-			getEntityTransaction().begin();
-			getEntityManager().persist(usuario);
-			getEntityManager().flush();
-			getEntityTransaction().commit();
-			getEntityManager().close();
-		}catch (Exception e) {
-			if(getEntityTransaction().isActive())
-				getEntityTransaction().rollback();
-		}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Usuario> lista() {
+		// TODO Auto-generated method stub
+		return entityManager.createQuery("select u from Usuario u").getResultList();
 	}
-	
-	private EntityManager getEntityManager(){
-		if(this.entityManager == null || !this.entityManager.isOpen()){
-			entityManager = JPA.geEntityManager();
-		}
-		return entityManager;
+
+	@Override
+	public void inserir(Usuario t) {
+		// TODO Auto-generated method stub
+		entityManager.persist(t);
 	}
-	
-	private EntityTransaction getEntityTransaction(){
-		return getEntityManager().getTransaction();
-	}
-	
+
 }

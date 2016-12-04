@@ -3,39 +3,36 @@ package br.com.fiveware.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
 import br.com.fiveware.model.UsuarioEstadoCivil;
 
-public class UsuarioEstadoCivilDAO {
+@Repository
+public class UsuarioEstadoCivilDAO implements DAO<UsuarioEstadoCivil> {
+
+	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@SuppressWarnings("unchecked")
-	public List<UsuarioEstadoCivil> getUsuariosEstadoCivils(){
-		Query query = getEntityManager().createQuery("select uec from UsuarioEstadoCivil uec");
-		List<UsuarioEstadoCivil> estados = (List<UsuarioEstadoCivil>)query.getResultList();
-		getEntityManager().close();
-		return estados;
+	@Override
+	public List<UsuarioEstadoCivil> lista() {
+		// TODO Auto-generated method stub
+		return entityManager.createQuery("select uec from UsuarioEstadoCivil uec").getResultList();
 	}
-	
-	public UsuarioEstadoCivil getUsuariosEstadoCivil(int id){
-		Query query = getEntityManager().createQuery("select uec from UsuarioEstadoCivil uec where uec.id = :id");
-		query.setParameter("id", id);
-		UsuarioEstadoCivil usuarioEstadoCivil = (UsuarioEstadoCivil) query.getSingleResult();
-		getEntityManager().close();
-		return usuarioEstadoCivil;
+
+	@Override
+	public UsuarioEstadoCivil buscar(int id) {
+		// TODO Auto-generated method stub
+		return (UsuarioEstadoCivil) entityManager
+				.createQuery("select uec from UsuarioEstadoCivil uec where uec.id = :id").setParameter("id", id)
+				.getSingleResult();
 	}
-	
-	private EntityManager getEntityManager(){
-		if(this.entityManager == null || !this.entityManager.isOpen()){
-			entityManager = JPA.geEntityManager();
-		}
-		return entityManager;
+
+	@Override
+	public void inserir(UsuarioEstadoCivil t) {
+		// TODO Auto-generated method stub
+		entityManager.persist(t);
 	}
-	
-	@SuppressWarnings("unused")
-	private EntityTransaction getEntityTransaction(){
-		return getEntityManager().getTransaction();
-	}
+
 }
